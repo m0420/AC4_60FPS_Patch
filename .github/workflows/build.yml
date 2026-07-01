@@ -1,9 +1,41 @@
-name: Build PS4 ELF
-on: push
+name: Build PS5 ELF
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
-      - name: Dummy Build (OpenOrbis SDK nötig)
-        run: echo "Hier OpenOrbis Build-Befehl einfügen"
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install System Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential clang lld git
+
+      - name: Setup PS5 Payload SDK
+        run: |
+          git clone https://github.com/john-tornblom/ps5-payload-sdk.git /tmp/ps5-payload-sdk
+          cd /tmp/ps5-payload-sdk
+          make
+          sudo make DESTDIR=/opt/ps5-payload-sdk install
+
+      - name: Build Project
+        run: |
+          # Setzt die Umgebungsvariable für den Compiler und führt dein lokales Makefile aus
+          export PS5_PAYLOAD_SDK=/opt/ps5-payload-sdk
+          make
+
+      - name: Upload ELF Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: PS5-Payload-ELF
+          # Sucht nach der kompilierten .elf Datei (ggf. Pfad/Namen anpassen)
+          path: ./*.elf 
+          if-no-files-found: error
