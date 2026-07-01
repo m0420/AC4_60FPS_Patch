@@ -1,0 +1,9 @@
+name: Build PS4 ELF
+on: push
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Dummy Build (OpenOrbis SDK nötig)
+        run: echo "Hier OpenOrbis Build-Befehl einfügen"
