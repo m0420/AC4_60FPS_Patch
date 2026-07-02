@@ -1,3 +1,11 @@
 #include <stdint.h>
 #include <string.h>
-void apply_patch(uint64_t base) { memcpy((void*)(base + 0x00cf4c49), "\xBE\x00\x00\x00\x00", 5); }
+
+void apply_patch(uint64_t base) {
+    memcpy((void*)(base + 0x00cf4c49), "\xBE\x00\x00\x00\x00", 5);
+}
+
+int main(void) {
+    // Hier kommt später die Logik rein, um das Spiel im Speicher zu finden
+    return 0;
+}
