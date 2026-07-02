@@ -2,7 +2,11 @@ ifndef PS5_PAYLOAD_SDK
     $(error PS5_PAYLOAD_SDK is undefined)
 endif
 
-target := payload.elf
-objs   := src/main.o
+include $(PS5_PAYLOAD_SDK)/make/toolchain.mk
 
-include $(PS5_PAYLOAD_SDK)/Makefile.build
+ELF := payload.elf
+
+all: $(ELF)
+
+$(ELF): src/main.c
+	$(CC) $(CFLAGS) -o $@ $^
